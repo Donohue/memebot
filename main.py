@@ -2,7 +2,7 @@ import os
 import json
 import requests
 from random import randrange
-from flask import Flask, request
+from flask import Flask, Response, request
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
@@ -30,8 +30,11 @@ def webhook():
     if not meme:
         return 'Memebot failed to find meme for "%s"' % meme_key
 
-    return json.dumps({
-        'response_type': 'in_channel',
-        'text': meme['url']
-    })
+    return Response(
+        json.dumps({
+            'response_type': 'in_channel',
+            'text': meme['url']
+        }),
+        mimetype='application/json'
+    )
 
