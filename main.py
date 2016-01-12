@@ -33,9 +33,8 @@ def webhook():
     return Response(
         json.dumps({
             'response_type': 'in_channel',
-            'text': meme['url'],
             'attachments': [{
-                'text': 'hi',
+                'text': meme['url'],
                 'image_url': meme['url']
             }],
         }),
