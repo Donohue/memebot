@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 import json
 import requests
@@ -41,7 +42,8 @@ def get_url_for_meme(meme, other_words):
 
     top = ''
     bottom = ''
-    other_string = ' '.join(other_words)
+    other_string = ' '.join(other_words).encode('utf-8')
+    other_string = other_string.replace('“', '"').replace('”', '"')
     matches = re.findall(r'\"(.+?)\"', other_string)
     if len(matches) >= 2:
         top = matches[0]
