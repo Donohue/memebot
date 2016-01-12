@@ -64,9 +64,10 @@ def get_url_for_meme(meme, other_words):
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
-    meme, other_words = get_meme_and_other_words(request.form.get('text'))
+    text = request.form.get('text')
+    meme, other_words = get_meme_and_other_words(text)
     if not meme:
-        return 'Memebot failed to find meme for "%s"' % meme_key
+        return 'Memebot failed to find meme for "%s"' % text
     url = get_url_for_meme(meme, other_words)
     return Response(
         json.dumps({
