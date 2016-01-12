@@ -92,7 +92,7 @@ def oauth():
     }
     try:
         response = requests.post('https://slack.com/api/oauth.access', data=json.dumps(params))
-        print response.text()
+        print response.text
     except Exception, e:
         return 'Slack request failed: %s' % str(e)
     return 'Success'
