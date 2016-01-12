@@ -74,7 +74,7 @@ def webhook():
             'response_type': 'in_channel',
             'attachments': [{
                 'title': meme['title'],
-                'title_url': url,
+                'title_link': url,
                 'image_url': url
             }],
         }),
