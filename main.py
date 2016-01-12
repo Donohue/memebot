@@ -11,6 +11,9 @@ from flask import Flask, Response, request
 app = Flask(__name__)
 app.config['DEBUG'] = True
 
+SLACK_CLIENT_ID = os.environ['SLACK_CLIENT_ID']
+SLACK_CLIENT_SECRET = os.environ['SLACK_CLIENT_SECRET']
+
 with open('./memes.json') as f:
     memes = json.loads(f.read())
 
@@ -76,3 +79,19 @@ def webhook():
         mimetype='application/json'
     )
 
+@app.route('/oauth', methods=['GET'])
+def oauth():
+    code = request.args.get('code')
+    if not code:
+        return 'Failure'
+
+    params = {
+        'client_id': SLACK_CLIENT_ID,
+        'client_secret': SLACK_CLIENT_SECRET,
+        'code': code
+    }
+    try:
+        requests.post('https://slack.com/api/oauth.access', data=json.dumps(params))
+    except Exception, e:
+        return 'Slack request failed: %s' % str(e)
+    return 'Success'
