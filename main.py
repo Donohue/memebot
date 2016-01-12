@@ -1,6 +1,9 @@
 import os
 import json
 import requests
+import re
+import urllib
+import urlparse
 from random import randrange
 from flask import Flask, Response, request
 
@@ -17,25 +20,55 @@ for meme in memes:
         meme_list.append(meme)
         meme_dict[key] = meme_list
 
-@app.route('/webhook', methods=['POST'])
-def webhook():
+def get_meme_and_other_words(text):
     meme = None
     meme_key = ''
-    for word in request.form.get('text').split():
+    other_words = []
+    for word in text.split():
         meme_key += ' ' + word.lower()
         meme_key = meme_key.strip()
-        if meme_key in meme_dict:
+        if meme:
+            other_words.append(word)
+        elif meme_key in meme_dict:
             meme_list = meme_dict[meme_key]
             meme = meme_list[randrange(0, len(meme_list))]
+    return meme, other_words
+
+def get_url_for_meme(meme, other_words):
+    url = meme['url']
+    if not 'apimeme' in meme or len(other_words) < 2:
+        return url
+
+    top = ''
+    bottom = ''
+    other_string = ' '.join(other_words)
+    matches = re.findall(r'\"(.+?)\"', other_string)
+    if len(matches) >= 2:
+        top = matches[0]
+        bottom = matches[1]
+    elif len(matches):
+        bottom = matches[0]
+    parts = list(urlparse.urlparse(url))
+    query_dict = dict(urlparse.parse_qsl(parts[4]))
+    query_dict.update({
+        'top': top,
+        'bottom': bottom
+    })
+    parts[4] = urllib.urlencode(query_dict)
+    return urlparse.urlunparse(parts)
+
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    meme, other_words = get_meme_and_other_words(request.form.get('text'))
     if not meme:
         return 'Memebot failed to find meme for "%s"' % meme_key
-
+    url = get_url_for_meme(meme, other_words)
     return Response(
         json.dumps({
             'response_type': 'in_channel',
             'attachments': [{
-                'text': meme['url'],
-                'image_url': meme['url']
+                'text': url,
+                'image_url': url
             }],
         }),
         mimetype='application/json'
