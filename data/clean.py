@@ -19,13 +19,12 @@ def main():
     memes = []
     for li in document.xpath('//li'):
         div = li.xpath('./div')[0]
-        title = div.text_content().lower()
-        apimeme = div.text_content()
+        title = div.text_content()
         memes.append({
             'title': title,
-            'keys': [title],
-            'url': 'http://apimeme.com/meme?meme=%s&top=&bottom=' % urllib.quote_plus(apimeme),
-            'apimeme': apimeme
+            'keys': [title.lower()],
+            'url': 'http://apimeme.com/meme?meme=%s&top=&bottom=' % urllib.quote_plus(title),
+            'apimeme': title,
         })
     print json.dumps(memes, sort_keys=True, indent=4)
 
