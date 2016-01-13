@@ -48,6 +48,7 @@ def get_url_for_meme(meme, other_words):
     other_string = ' '.join(other_words).encode('utf-8')
     other_string = other_string.replace('“', '"').replace('”', '"')
     other_string = other_string.replace("‘", "'").replace("’", "'")
+    other_string = other_string.replcae("…", '...')
     matches = re.findall(r'\"(.+?)\"', other_string)
     if len(matches) >= 2:
         top = matches[0]
