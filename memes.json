@@ -98,7 +98,8 @@
     {
         "apimeme": "Aint Nobody Got Time For That", 
         "keys": [
-            "aint nobody got time for that"
+            "aint nobody got time for that",
+            "time"
         ], 
         "title": "Aint Nobody Got Time For That", 
         "url": "http://apimeme.com/meme?meme=Aint+Nobody+Got+Time+For+That&top=&bottom="
@@ -1282,7 +1283,8 @@
     {
         "apimeme": "One Does Not Simply", 
         "keys": [
-            "one does not simply"
+            "one does not simply",
+            "boromir"
         ], 
         "title": "One Does Not Simply", 
         "url": "http://apimeme.com/meme?meme=One+Does+Not+Simply&top=&bottom="
