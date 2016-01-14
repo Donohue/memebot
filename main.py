@@ -64,9 +64,18 @@ def get_url_for_meme(meme, other_words):
     parts[4] = urllib.urlencode(query_dict)
     return urlparse.urlunparse(parts)
 
+def meme_list():
+    ret = ''
+    for meme in memes:
+        ret += '* `%s` – %s\n' % (meme['keys'][0].encode('utf-8'), meme['title'].encode('utf-8'))
+    return ret
+
 @app.route('/webhook', methods=['POST'])
 def webhook():
     text = request.form.get('text')
+    if text.strip() == 'list':
+        return meme_list()
+
     meme, other_words = get_meme_and_other_words(text)
     if not meme:
         return 'Memebot failed to find meme for "%s"' % text
